@@ -1,0 +1,16 @@
+{
+  "name": "StockLock",
+  "displayName": "StockLock",
+  "expo": {
+    "name": "StockLock",
+    "slug": "stocklock",
+    "android": {
+      "package": "com.stocklock"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6aa353ff-f9d7-4b50-a5ff-9314d7988b68"
+      }
+    }
+  }
+}

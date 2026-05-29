@@ -29,6 +29,7 @@ import {
   saveSelection,
   selectAllIndices,
 } from '../services/SelectionStorage';
+import { hapticSuccess, hapticTap } from '../utils/haptics';
 
 const { LockScreenModule } = NativeModules;
 
@@ -94,12 +95,14 @@ export const HomeScreen = () => {
   }, [selectionReady, selection, trackedInstruments]);
 
   const onRefresh = async () => {
+    hapticTap();
     setRefreshing(true);
     await refresh();
     setRefreshing(false);
   };
 
   const toggleIndex = (indexItem) => {
+    hapticTap();
     setSelection((prev) => {
       const exists = prev.indices.some((i) => i.symbol === indexItem.symbol);
       if (exists && prev.indices.length === 1) {
@@ -116,6 +119,7 @@ export const HomeScreen = () => {
   };
 
   const addStock = (stockItem) => {
+    hapticSuccess();
     setSelection((prev) => {
       if (prev.stocks.some((s) => s.symbol === stockItem.symbol)) return prev;
       if (prev.stocks.length >= MAX_STOCK_SELECTION) {
@@ -129,6 +133,7 @@ export const HomeScreen = () => {
   };
 
   const removeStock = (symbol) => {
+    hapticTap();
     setSelection((prev) =>
       normalizeSelection({
         ...prev,
@@ -149,7 +154,7 @@ export const HomeScreen = () => {
             {lastUpdated ? `Updated ${formatTime(lastUpdated)}` : 'Fetching live data...'}
           </Text>
         </View>
-        <TouchableOpacity style={styles.refreshBtn} onPress={refresh}>
+        <TouchableOpacity style={styles.refreshBtn} onPress={onRefresh}>
           <Text style={styles.refreshIcon}>⟳</Text>
         </TouchableOpacity>
       </View>
@@ -163,7 +168,7 @@ export const HomeScreen = () => {
         <View style={styles.errorContainer}>
           <Text style={styles.errorIcon}>⚠</Text>
           <Text style={styles.errorText}>{error}</Text>
-          <TouchableOpacity style={styles.retryBtn} onPress={refresh}>
+          <TouchableOpacity style={styles.retryBtn} onPress={onRefresh}>
             <Text style={styles.retryText}>Retry</Text>
           </TouchableOpacity>
         </View>
